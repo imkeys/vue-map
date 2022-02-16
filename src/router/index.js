@@ -9,7 +9,7 @@ Vue.use(Router)
 export const BASIC_ROUTES = [
   {
     path: '/(index)?',
-    redirect: '/home'
+    redirect: '/baidu-map'
   },
   ...pageRouter,
   {

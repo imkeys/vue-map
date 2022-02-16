@@ -1,6 +1,6 @@
 export default [
   {
-    path: '/home',
-    component: () => import(/* webpackChunkName: "page" */ '@/views/home/')
+    path: '/baidu-map',
+    component: () => import(/* webpackChunkName: "page" */ '@/views/baidu-map/')
   }
 ]

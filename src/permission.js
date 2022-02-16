@@ -11,15 +11,15 @@ const routeInstance = new Vue({
 
 Vue.prototype.$matchedRoutes = routeInstance
 
-NProgress.configure({
-  showSpinner: false
-})
+// NProgress.configure({
+//   showSpinner: false
+// })
 
 router.beforeEach(async (to, from, next) => {
-  NProgress.start()
+  // NProgress.start()
   next()
 })
 
 router.afterEach(res => {
-  NProgress.done()
+  // NProgress.done()
 })
