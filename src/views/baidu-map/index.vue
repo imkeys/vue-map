@@ -52,8 +52,28 @@ export default {
       marks.map(item => {
         const point = new BMap.Point(item.lng, item.lat)
         // 添加标记点
-        const marker = new BMap.Marker(point)
+        const iconImg = require('@/assets/bdmap/bdmap-1.png')
+        const icon = new BMap.Icon(iconImg, new BMap.Size(30, 30))
+        const marker = new BMap.Marker(point, {
+          icon: icon
+        })
         map.addOverlay(marker)
+        // 添加文字
+        const labelOpts = {
+          position: point,
+          offset: new BMap.Size(-15, -10)
+        }
+        const label = new BMap.Label(item.person, labelOpts)
+        label.setStyle({
+          color: '#ffffff',
+          background: 'none',
+          border: 0,
+          width: '28px',
+          display: 'block',
+          textAlign: 'center',
+          whiteSpace: 'nowrap'
+        })
+        map.addOverlay(label)
         // 添加圆形
         // const circle = new BMap.Circle(point, 6, {
         //   strokeColor: 'Red',
@@ -77,13 +97,13 @@ export default {
             <dd>${item.data.d}</dd>
           </dl>
         `
-        const opts = {
+        const windowOpts = {
           width: 200,
           height: 100,
           title: title,
           message: ``
         }
-        const infoWindow = new BMap.InfoWindow(content, opts)
+        const infoWindow = new BMap.InfoWindow(content, windowOpts)
         marker.addEventListener('click', function () {
           map.openInfoWindow(infoWindow, point)
         })
@@ -93,34 +113,36 @@ export default {
      * 显示市区边界
      */
     showBoundary (BMap, map) {
-      var bdary = new BMap.Boundary()
-      var name = '长沙市'
-      bdary.get(name, function (rs) {
-        // 获取行政区域
-        // map.clearOverlays() // 清除地图覆盖物
-        // 行政区域的点有多少个
-        var count = rs.boundaries.length
-        for (var i = 0; i < count; i++) {
-          var ply = new BMap.Polygon(rs.boundaries[i], {
-            // 填充颜色
-            fillColor: 'rgba(0, 255, 255, .9)',
-            // 填充透明度
-            fillOpacity: 0.2,
-            // 设置多边形边线线粗
-            strokeWeight: 2,
-            // 设置多边形边线透明度
-            strokeOpacity: 0.5,
-            // 设置多边形边线样式为实线或虚线
-            StrokeStyle: 'solid',
-            // 设置多边形边线颜色
-            strokeColor: '#eae85b'
-          })
-          // 建立多边形覆盖物
-          // 添加覆盖物
-          map.addOverlay(ply)
-          // 调整视野
-          // map.setViewport(ply.getPath())
-        }
+      const bdary = new BMap.Boundary()
+      const names = ['芙蓉区', '望城区', '岳麓区', '开福区', '雨花区', '天心区', '长沙县', '宁乡市', '浏阳市']
+      names.map(name => {
+        bdary.get(name, function (res) {
+          // 获取行政区域
+          // map.clearOverlays() // 清除地图覆盖物
+          // 行政区域的点有多少个
+          const count = res.boundaries.length
+          for (let i = 0; i < count; i++) {
+            const ply = new BMap.Polygon(res.boundaries[i], {
+              // 填充颜色
+              fillColor: 'rgba(0, 255, 255, .9)',
+              // 填充透明度
+              fillOpacity: 0.2,
+              // 设置多边形边线线粗
+              strokeWeight: 2,
+              // 设置多边形边线透明度
+              strokeOpacity: 0.5,
+              // 设置多边形边线样式为实线或虚线
+              StrokeStyle: 'solid',
+              // 设置多边形边线颜色
+              strokeColor: '#eae85b'
+            })
+            // 建立多边形覆盖物
+            // 添加覆盖物
+            map.addOverlay(ply)
+            // 调整视野
+            // map.setViewport(ply.getPath())
+          }
+        })
       })
     }
   }
