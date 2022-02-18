@@ -44,8 +44,7 @@ module.exports = {
       'vue': 'Vue',
       'element-ui': 'ELEMENT',
       'vue-router': 'VueRouter',
-      'axios': 'axios',
-      'html2canvas': 'html2canvas'
+      'axios': 'axios'
     },
     devServer: {
       disableHostCheck: true,
