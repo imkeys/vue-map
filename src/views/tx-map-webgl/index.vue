@@ -6,8 +6,8 @@
 
 <script>
 import { TMapGl } from '@/utils/map.js'
-let TMap = null
 let $map = null
+let TMap = null
 
 export default {
   data () {
