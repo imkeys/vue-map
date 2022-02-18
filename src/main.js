@@ -7,7 +7,6 @@ import App from './App'
 
 import '@/styles/common.css'
 import '@/styles/animate.css'
-import baiduMap from 'vue-baidu-map'
 
 if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'production') {
   const { mockXHR } = require('../mock').default
@@ -23,6 +22,3 @@ let vm = new Vue({
 })
 
 Vue.use({ vm })
-Vue.use(baiduMap, {
-  ak: 'UWadBmY1HqlxvgtuMfrbP5p2v8IkIchN'
-})

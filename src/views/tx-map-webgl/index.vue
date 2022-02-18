@@ -7,7 +7,7 @@
 <script>
 import { TMapGl } from '@/utils/map.js'
 let TMap = null
-let map = null
+let $map = null
 
 export default {
   data () {
@@ -58,7 +58,7 @@ export default {
   methods: {
     initMap () {
       const center = new TMap.LatLng(28.195611, 112.962661)
-      map = new TMap.Map('map', {
+      $map = new TMap.Map('map', {
         center: center,
         zoom: 12
       })
@@ -66,7 +66,7 @@ export default {
     },
     setMark () {
       const markerLayer = new TMap.MultiMarker({
-        map: map,
+        map: $map,
         styles: {
           myStyle: new TMap.MarkerStyle({
             width: 25,
@@ -102,7 +102,7 @@ export default {
       // eslint-disable-next-line no-unused-vars
       // eslint-disable-next-line no-new
       new TMap.InfoWindow({
-        map: map,
+        map: $map,
         position: new TMap.LatLng(lat, lng),
         content: properties.title
       })

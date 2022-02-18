@@ -5,9 +5,9 @@
 </template>
 
 <script>
-import { TMapJs } from '@/utils/map.js'
-let TMap = null
+import { BMapGl } from '@/utils/map.js'
 let $map = null
+let BMapGL = null
 
 export default {
   data () {
@@ -52,36 +52,30 @@ export default {
     }
   },
   async mounted () {
-    TMap = await TMapJs()
+    BMapGL = await BMapGl()
     this.initMap()
   },
   methods: {
     initMap () {
-      const center = new TMap.LatLng(28.195611, 112.962661)
-      $map = new TMap.Map('map', {
-        center: center,
-        zoom: 12
-      })
+      $map = new BMapGL.Map('map')
+      $map.centerAndZoom(new BMapGL.Point(112.962661, 28.195611), 15)
+      $map.enableScrollWheelZoom(true)
       this.setMark()
     },
     setMark () {
       this.markers.map(item => {
         const { lat, lng } = item.position
-        // 标记点
-        const marker = new TMap.Marker({
-          animation: TMap.MarkerAnimation.DROP,
-          position: new TMap.LatLng(lat, lng),
-          map: $map
-        })
-        // 信息窗
-        const infoWin = new TMap.InfoWindow({
-          map: $map,
-          position: new TMap.LatLng(lat, lng),
-          content: item.label,
-          visible: false
-        })
-        TMap.event.addListener(marker, 'click', function () {
-          infoWin.open()
+        const point = new BMapGL.Point(lng, lat)
+        const opts = {
+          width: 150,
+          height: 50,
+          title: item.label
+        }
+        const infoWindow = new BMapGL.InfoWindow('', opts)
+        const marker = new BMapGL.Marker(point)
+        $map.addOverlay(marker)
+        marker.addEventListener('click', () => {
+          $map.openInfoWindow(infoWindow, point)
         })
       })
     }

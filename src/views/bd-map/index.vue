@@ -1,53 +1,47 @@
 <template>
   <div>
-    <div class="bdmap-view">
-      <baidu-map
-        class="bdmap"
-        :scroll-wheel-zoom="scrollWheelZoom"
-        @ready="initMap">
-      </baidu-map>
-    </div>
+    <baidu-map
+      id="map"
+      :scroll-wheel-zoom="false"
+      ak="UWadBmY1HqlxvgtuMfrbP5p2v8IkIchN"
+      @ready="initMap">
+    </baidu-map>
   </div>
 </template>
 
 <script>
+import baiduMap from 'vue-baidu-map/components/map/Map.vue'
 import { baiduJson } from './skin'
 import { marks } from './data'
+let $map = null
 
 export default {
-  components: {},
-  data () {
-    return {
-      $map: null,
-      center: {
-        lng: 112.969048,
-        lat: 28.2016
-      },
-      zoom: 10,
-      scrollWheelZoom: false
-    }
+  components: {
+    baiduMap
   },
-  created () {},
-  mounted () {},
+  data () {
+    return {}
+  },
   methods: {
     /**
      * 载入地图
      */
     initMap ({ BMap, map }) {
-      const point = new BMap.Point(this.center.lng, this.center.lat)
-      map.centerAndZoom(point, this.zoom)
-      map.setMapStyle({
+      $map = map
+      const point = new BMap.Point(112.969048, 28.2016)
+      $map.centerAndZoom(point, 10)
+      $map.setMapStyle({
         styleJson: baiduJson
       })
       // 载入边界
-      this.showBoundary(BMap, map)
+      this.showBoundary(BMap)
       // 载入标注
-      this.addOverlay(BMap, map)
+      this.addOverlay(BMap)
     },
     /**
      * 将标注添加到地图中
      */
-    addOverlay (BMap, map) {
+    addOverlay (BMap) {
       if (marks.length === 0) return false
       marks.map(item => {
         const point = new BMap.Point(item.lng, item.lat)
@@ -57,7 +51,7 @@ export default {
         const marker = new BMap.Marker(point, {
           icon: icon
         })
-        map.addOverlay(marker)
+        $map.addOverlay(marker)
         // 添加文字
         const labelOpts = {
           position: point,
@@ -73,7 +67,7 @@ export default {
           textAlign: 'center',
           whiteSpace: 'nowrap'
         })
-        map.addOverlay(label)
+        $map.addOverlay(label)
         // 添加圆形
         // const circle = new BMap.Circle(point, 6, {
         //   strokeColor: 'Red',
@@ -82,7 +76,7 @@ export default {
         //   Color: 'Red',
         //   fillColor: '#f03'
         // })
-        // map.addOverlay(circle)
+        // $map.addOverlay(circle)
         // 添加信息弹框
         const title = `
           <div style="line-height: 20px; margin: 0 0 5px; font-weight: bold;">
@@ -105,20 +99,20 @@ export default {
         }
         const infoWindow = new BMap.InfoWindow(content, windowOpts)
         marker.addEventListener('click', function () {
-          map.openInfoWindow(infoWindow, point)
+          $map.openInfoWindow(infoWindow, point)
         })
       })
     },
     /**
      * 显示市区边界
      */
-    showBoundary (BMap, map) {
+    showBoundary (BMap) {
       const bdary = new BMap.Boundary()
       const names = ['芙蓉区', '望城区', '岳麓区', '开福区', '雨花区', '天心区', '长沙县', '宁乡市', '浏阳市']
       names.map(name => {
         bdary.get(name, function (res) {
           // 获取行政区域
-          // map.clearOverlays() // 清除地图覆盖物
+          // $map.clearOverlays() // 清除地图覆盖物
           // 行政区域的点有多少个
           const count = res.boundaries.length
           for (let i = 0; i < count; i++) {
@@ -138,9 +132,9 @@ export default {
             })
             // 建立多边形覆盖物
             // 添加覆盖物
-            map.addOverlay(ply)
+            $map.addOverlay(ply)
             // 调整视野
-            // map.setViewport(ply.getPath())
+            // $map.setViewport(ply.getPath())
           }
         })
       })
@@ -150,12 +144,9 @@ export default {
 </script>
 
 <style lang="less" scoped>
-  .bdmap-view {
+  #map {
     width: 100%;
     height: 100vh;
     background: #dddddd;
-    .bdmap {
-      height: 100%;
-    }
   }
 </style>

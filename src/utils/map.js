@@ -31,3 +31,20 @@ export function TMapGl () {
     document.head.appendChild(script)
   })
 }
+
+/**
+ * 百度地图
+ * GL版
+ */
+export function BMapGl () {
+  return new Promise(function (resolve, reject) {
+    window.onload = function () {
+      resolve(window.BMapGL)
+    }
+    var script = document.createElement('script')
+    script.type = 'text/javascript'
+    script.src = 'https://api.map.baidu.com/api?v=1.0&type=webgl&ak=UWadBmY1HqlxvgtuMfrbP5p2v8IkIchN&callback=init'
+    script.onerror = reject
+    document.head.appendChild(script)
+  })
+}
